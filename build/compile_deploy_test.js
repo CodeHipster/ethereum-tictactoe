@@ -1,23 +1,36 @@
-const binCompiler = require("./compile_bin.js");
-const jsCompiler = require("./compile_js.js");
-const web3TestRPC = require("./web3TestRPC.js");
-const tester = require("./test.js");
+const compiler = require("./compile_bin.js");
+const deployer = require("./deploy.js");
+const web3 = require("./web3TestRPC.js");
 
-exports.go = function(){
-    //compile binaries.
-    console.log("compiling bytecode and abi.");
-    var compiledBin = binCompiler.compile();
-    console.log("compiled bytecode and abi.");
-
-    //compile binaries to js objects.
-    console.log("compiling ether pudding js.");
-    jsCompiler.compile(compiledBin.abi, compiledBin.bytecode);
-    console.log("compiled ether pudding js.");
-
-    //test js objects on testrpc network.
-    console.log("Starting tests.");
-    tester.test(web3TestRPC);
-    console.log("Finished tests.");
+const compiledContract = compiler.compile();
 
 
-}
+
+exports.deploy = deployer.deploy(compiledContract.bytecode, compiledContract.abi, web3, "Thijs", web3.eth.accounts[0]
+    ,function(contractInstance){
+        console.log("compile-deploy.js - contractInstance: ", contractInstance);
+        console.log("compile-deploy.js - gamestate: ", contractInstance.getState.call());
+
+        //console.log("compile-deploy.js - join gascost: ", contractInstance.join.estimateGas());
+        contractInstance.join.sendTransaction("cheese",{from:web3.eth.accounts[1]});
+        console.log("compile-deploy.js - gamestate: ", contractInstance.getState.call());
+
+        console.log("compile-deploy.js - placeMarker gascost: ", contractInstance.placeMarker.estimateGas());
+        contractInstance.placeMarker.sendTransaction(0,{from:web3.eth.accounts[0]});
+        console.log("compile-deploy.js - gamestate: ", contractInstance.getState.call());
+
+        contractInstance.placeMarker.sendTransaction(3,{from:web3.eth.accounts[1]});
+        console.log("compile-deploy.js - gamestate: ", contractInstance.getState.call());
+
+        contractInstance.placeMarker.sendTransaction(1,{from:web3.eth.accounts[0]});
+        console.log("compile-deploy.js - gamestate: ", contractInstance.getState.call());
+
+        contractInstance.placeMarker.sendTransaction(4,{from:web3.eth.accounts[1]});
+        console.log("compile-deploy.js - gamestate: ", contractInstance.getState.call());
+
+        contractInstance.placeMarker.sendTransaction(2,{from:web3.eth.accounts[0]});
+        console.log("compile-deploy.js - gamestate: ", contractInstance.getState.call());
+
+
+    }); 
+exports.web3 = web3;
