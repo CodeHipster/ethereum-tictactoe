@@ -1,4 +1,4 @@
-pragma solidity ^0.4.9;
+pragma solidity ^0.4.8;
 contract TicTacToe {
     
     //default state = Free
@@ -47,7 +47,7 @@ contract TicTacToe {
         
         address currentPlayerId = msg.sender;
         var (valid, explanation) = validMove(position, currentPlayerId);
-        if(!valid) return;
+        if(!valid) throw;
         
         TileState tileState;
         Player memory nextPlayer;
@@ -88,7 +88,8 @@ contract TicTacToe {
         
         //if player has 3 tiles on a row he is the winner.
         // we could use a fancy algorithm, or just check the possible lines :)
-        TileState[9] b = gamestate.board;
+        //Copy the array from storage to memory (as we will call values multiple times.)
+        TileState[9] memory b = gamestate.board;
         if(
             (p == b[0] && p == b[1] && p == b[2]) ||
             (p == b[3] && p == b[4] && p == b[5]) ||
@@ -109,7 +110,7 @@ contract TicTacToe {
         if(msg.sender != gamestate.onTurn.id){
             return (false, ValidExplanations.NotOnesTurn);
         }
-        //must be in playing phase
+        //m`ust be in playing phase
         if(gamestate.phase != Phase.Playing){
             return (false, ValidExplanations.NotStarted);
         }

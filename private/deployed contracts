@@ -1,0 +1,26 @@
+Contract mined! address: 0x011f4c243cb601d9f04f73777d59741b885cd4bb transactionHash: 0x04dc4d4e50bd1fce1a19b09bc17404a2a2cbf4205c1bc9e
+95d56036859364308
+!Destroyed!
+
+Contract mined! address: 0x2d2334f4b930e437578bb26debc160695548421a transactionHash: 0xffc20f99b92b6fa246a146afd9876c9f847ba5d8ca41661
+64facfb6de6d3d3b2
+!Destroyed!
+
+Contract mined! address: 0x837dd88bc978ac23f355d34497eb55aa2bbaf3d0 transactionHash: 0x0b28363227cceaf821e45d04b6c355b5074b2b844c47c3c
+188918d660b269a2a
+
+> tictactoe.transactionHash
+"0x7acad519d6a8473c5fe1942673dbea0aa9450b26894dec5cd49c3960a0aab27d"
+never got mined???
+eth.getTransaction("0x7acad519d6a8473c5fe1942673dbea0aa9450b26894dec5cd49c3960a0aab27d")
+eth.getTransactionReceipt("0x7acad519d6a8473c5fe1942673dbea0aa9450b26894dec5cd49c3960a0aab27d")
+
+> tictactoe.transactionHash
+"0x9122958209397fe335ad4ed620a4e922911170f14ef1437c762e3fc46f272261"
+
+Contract mined! address: 0x95cd205cb0c44e951b61e47d5379924ecc0e25ff transactionHash: 0xe0709a4b43a38ba7d77f952923f2c96859d47b2b297932f
+adeb6ad831ca56d7d
+!destroyed!
+
+Contract mined! address: 0xa7df0ce6fd0a6bc2e9f43bcc10fd7b86f076e65f transactionHash: 0x883c8a4fe1e6f2afc2c7838963cd3b78d1df9a2ee0bfd03
+43006d67e3f4e96c6
