@@ -23,14 +23,14 @@ function parseBoard(board){
 }
 
 function parsePhase(phase){
-  switch(phase.s) {
-    case 0:
+  switch(phase.toFixed()) {
+    case "0":
       return "Joining";
-    case 1:
+    case "1":
       return "Playing"
-    case 2:
+    case "2":
       return "Ended"
-    case 3:
+    case "3":
       return "PayedOut"
     default:
       throw "unknown game phase."
