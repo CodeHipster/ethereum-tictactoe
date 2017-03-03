@@ -41,41 +41,41 @@ contract('TicTacToe', function(accounts) {
 
   var inst;
   it("should play a game with another player", function() {
-    console.log("Thijs1 starts a game.");
-    return TicTacToe.deployed("Thijs1")
+    console.log("Player1 starts a game.");
+    return TicTacToe.deployed("Player1")
     .then(function(instance) {
       inst = instance;
-      console.log("Thijs2 joins the game.")
-      return inst.join("Thijs2",{from:accounts[1]});
+      console.log("Player2 joins the game.")
+      return inst.join("Player2",{from:accounts[1]});
     }).then(function() {
       return inst.getState();
     }).then(function(gamestate) {
       console.log(parseGameState(gamestate));
-      console.log("Thijs1 places marker on 0");
+      console.log("Player1 places marker on 0");
       return inst.placeMarker(0,{from:accounts[0]});
     }).then(function() {
       return inst.getState();
     }).then(function(gamestate) {
       console.log(parseGameState(gamestate));
-      console.log("Thijs2 places marker on 3");
+      console.log("Player2 places marker on 3");
       return inst.placeMarker(3,{from:accounts[1]});
     }).then(function() {
       return inst.getState();
     }).then(function(gamestate) {
       console.log(parseGameState(gamestate));
-      console.log("Thijs1 places marker on 1");
+      console.log("Player1 places marker on 1");
       return inst.placeMarker(1,{from:accounts[0]});
     }).then(function() {
       return inst.getState();
     }).then(function(gamestate) {
       console.log(parseGameState(gamestate));
-      console.log("Thijs2 places marker on 4");
+      console.log("Player2 places marker on 4");
       return inst.placeMarker(4,{from:accounts[1]});
     }).then(function() {
       return inst.getState();
     }).then(function(gamestate) {
       console.log(parseGameState(gamestate));
-      console.log("Thijs1 places marker on 2");
+      console.log("Player1 places marker on 2");
       return inst.placeMarker(2,{from:accounts[0]});
     }).then(function() {
       return inst.getState();
@@ -83,7 +83,7 @@ contract('TicTacToe', function(accounts) {
       console.log(parseGameState(gamestate));
       return inst.hasWon(accounts[0]);
     }).then(function(hasWon){
-      console.log("Thijs1 has won: ", hasWon);
+      console.log("Player1 has won: ", hasWon);
     });
   });
 });
