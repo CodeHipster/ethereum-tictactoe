@@ -1,6 +1,8 @@
 pragma solidity ^0.4.8;
 contract TicTacToe {
     
+    event StateChange();
+
     //default state = Free
     enum TileState { Free, Player1, Player2 }
 
@@ -39,6 +41,8 @@ contract TicTacToe {
         gamestate.player2.id = msg.sender;
         gamestate.player2.name = name;
         gamestate.phase = Phase.Playing;
+
+        StateChange();
         
         return;
     }
@@ -72,6 +76,7 @@ contract TicTacToe {
             gamestate.onTurn = nextPlayer;
         }
 
+        StateChange();
     }
     
     function hasWon(address player) public constant returns (bool){
@@ -128,7 +133,17 @@ contract TicTacToe {
     
     function getState() public constant returns (Phase phase, TileState[9] board, string onTurn, address player1, string name1, address player2, string name2) {
         //return the state of the game.
-        return (gamestate.phase, gamestate.board, gamestate.onTurn.name, gamestate.player1.id, gamestate.player1.name, gamestate.player2.id, gamestate.player2.name);
+        if(gamestate.phase == Phase.Playing){
+            onTurn = gamestate.onTurn.name;
+        }
+        phase = gamestate.phase;
+        board = gamestate.board;
+        player1 = gamestate.player1.id;
+        name1 = gamestate.player1.name;
+        player2 = gamestate.player2.id;
+        name2 = gamestate.player2.name;
+
+        return;
     }
     
     // clean up method, should be changed to something that checks time of inactivity before destructing.
