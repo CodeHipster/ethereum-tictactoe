@@ -7,7 +7,8 @@ if(typeof web3 === 'undefined'){
 }
 
 var TictactoeContract = null;
-var ticTacToeInstance = null
+var ticTacToeInstance = null;
+var playerAddress = null;
 
 //load means when content is loaded. Happens before ready.
 $(window).on("load", initializeContract);
@@ -27,9 +28,9 @@ function initializeContract(){
 //Wire all the html elements to javascript functions.
 function wireButtons(){
     $("#new-game-btn").click(newGame);
-    $("#refresh-btn").click(loadState);
     $("#join-btn").click(join);
-    $("#board td").click(placeMarker)
+    //when clicking any table data on the board.
+    $("#board td").click(placeMarker);
 }
 
 function placeMarker(args){    
@@ -47,13 +48,13 @@ function placeMarker(args){
             return;
         }
         var position = $(cell).attr('id').substring(4,5);
-        //TODO: temporary ugly hack :D
-        var fromAccount = web3.eth.accounts[0];
-        if(state.onTurn == "Thijs 2") fromAccount = web3.eth.accounts[1];
 
-        ticTacToeInstance.placeMarker(position,{from: fromAccount})
-        .then(function(){console.log("marker placed")}
-        ,function(){console.log("placing marker failed")});
+        ticTacToeInstance.placeMarker(position,{from: playerAddress})
+        .then(function(){console.log("marker placed");}
+        ,function(error){
+            alert("placing marker failed.");
+            console.log(error);
+        });
     });
 }
 
@@ -67,20 +68,27 @@ function newGame(){
         return;
     }
 
-    TictactoeContract.new("Thijs 1", {from: web3.eth.accounts[0],gas:3000000})
+    playerAddress = web3.eth.accounts[0];
+    TictactoeContract.new("Thijs 1", {from: playerAddress, gas:3000000})
     .then(
-        function(instance){
-            ticTacToeInstance = instance;
-            console.log("new game is ready.");
-            // Start watchers for state change events.
-            instance.StateChange(onStateChange);
-            // get the state.
-            loadState();
-        }
+        onInstanceCreated
         ,function(error){
+            alert("could not deploy a new contract.")
             console.log(error)
         }
     );
+}
+
+function onInstanceCreated(instance){
+    ticTacToeInstance = instance;
+    console.log("new game is ready.");
+    // Start watchers for state change events.
+    instance.StateChange(onStateChange);
+    // get the state.
+    loadState();
+    //Set the address of this game.
+    console.log(instance);
+    $("#game-address").text(instance.address);
 }
 
 function onStateChange(error, result){
@@ -117,13 +125,24 @@ function loadState(){
     });
 }
 
-function join(){ 
-    if(!ticTacToeInstance) {
-        alert("No tictactoe game has been created yet.");
-        return;
+function join(){
+    var address = $("#join-input").val();
+    console.log("joining game: "+ address);
+    if(address && address !== ""){
+        TictactoeContract.at(address).then(function(instance){
+            onInstanceCreated(instance);
+            
+            playerAddress = web3.eth.accounts[1];
+            instance.join("Thijs 2", {from: playerAddress})
+        }
+        ,function(error){
+            alert("failed to join game.");
+            console.log(error);
+        });
+    }else{
+        alert("please input valid address.");
     }
 
-    ticTacToeInstance.join("Thijs 2", {from: web3.eth.accounts[1]})
 }
 
 function parseGameState(gamestate){
