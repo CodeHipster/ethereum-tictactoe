@@ -69,6 +69,7 @@ function newGame(){
     }
 
     playerAddress = web3.eth.accounts[0];
+    console.log(playerAddress);
     TictactoeContract.new("Thijs 1", {from: playerAddress, gas:3000000})
     .then(
         onInstanceCreated
@@ -77,6 +78,24 @@ function newGame(){
             console.log(error)
         }
     );
+}
+
+function getAccount(){
+     web3.eth.getAccounts(function(e,accounts){
+        // Check if there are accounts available
+        if (!e && accounts && accounts.length > 0) {
+            console.log("account already accessible: " + accounts[0])
+            return accounts[0];
+
+          } else {
+            mist.requestAccount(function(e, account) {
+                if(!e) {
+                    console.log("account requested from mist: ", account)
+                    return account;
+                }
+            });
+        }
+    });
 }
 
 function onInstanceCreated(instance){
