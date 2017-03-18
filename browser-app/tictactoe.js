@@ -12,7 +12,9 @@ var playerAddress = null;
 
 //load means when content is loaded. Happens before ready.
 $(window).on("load", initializeContract);
+$(window).on("resize", scaleTable);
 $(window).ready(wireButtons);
+$(window).ready(scaleTable);
 
 function initializeContract(){
     $.getJSON("./contracts/TicTacToe.json")
@@ -31,6 +33,12 @@ function wireButtons(){
     $("#join-btn").click(join);
     //when clicking any table data on the board.
     $("#board td").click(placeMarker);
+}
+
+function scaleTable(){
+    var boardElement = $("#board");
+    var width = boardElement.parent().width();
+    boardElement.height(width);
 }
 
 function placeMarker(args){    

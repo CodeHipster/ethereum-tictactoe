@@ -1,8 +1,8 @@
 table
 {
     table-layout: fixed;
-    width: 500px;
-    height: 500px;
+    width: 100%;
+    height: 100%;
     margin: auto;
     cursor:pointer;
 }
@@ -11,4 +11,21 @@ td
 {
     border: 5px solid black;
     overflow: hidden;
+}
+
+.bg-header
+{
+    background-color: #C99D66;
+}
+
+.container
+{
+    background-color: #ECF0F1;
+    color: #3C3C3D;
+}
+
+.player-box
+{
+    text-align: left;
+    background-color: #43ABC9
 }

@@ -1,53 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <script type="text/javascript" src="./libs/web3.min.js"></script>
-    <script type="text/javascript" src="./libs/jquery.min.js"></script>
-    <script type="text/javascript" src="./libs/truffle-contract.min.js"></script>
-    <script type="text/javascript" src="./libs/require.js"></script>
-    <script type="text/javascript" src="./tictactoe.js"></script>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="./libs/web3.min.js"></script>
+    <script type="text/javascript" src="./libs/truffle-contract.min.js"></script>
+    <script type="text/javascript" src="./tictactoe.js"></script>
     <title>TicTacToe on ethereum</title>
 </head>
 
 <body>
-    <center>TicTacToe on ethereum
-        <br />
-        <br />
-    </center>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="bg-header">
+                    <h1 class="text-center">
+                        <div class="title">TicTacToe</div>
+                        <div class="sub-title">on Ethereum</div>
+                    </h1>
+                </div>        
+            </div>
+        </div>
+        <div class="row">
+            <div>Game address:<span id=game-address>game's address</span></div>
+        </div>
+        <div class="row">
+            <div class="col-xs-2 col-xs-offset-3 player-box">
+                <div>player 1</div>
+                <div>name:<span id="player1-name">player1's name</span></div>
+                <div>address:<span id="player1-address">player1's address</span></div>
+            </div>
+            <div class="col-xs-2 col-xs-offset-2 player-box">
+                <div>player 2</div>
+                <div>name:<span id="player2-name">player2's name</span></div>
+                <div>address:<span id="player2-address">player2's address</span></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6 col-xs-offset-3">
+                <table id="board">
+                    <tr>
+                        <td id="cell0"></td>
+                        <td id="cell1"></td>
+                        <td id="cell2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell3"></td>
+                        <td id="cell4"></td>
+                        <td id="cell5"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell6"></td>
+                        <td id="cell7"></td>
+                        <td id="cell8"></td>
+                    </tr>
+                </table>
+            </div>
+            </div>
+        </div>
+    </div>
+            
+
     <button id="new-game-btn" type="button">New game</button>
-    game id: <div id=game-address></div>
-    <br>
     Game to join: <input type="text" id="join-input">
     <button id="join-btn" type="button">Join</button>
     
-    <div>Status</div>
     <div id="state"></div>
-    <div>Player1: </div> 
-    <div id="player1-name"></div>
-    <div>Player2: </div> 
-    <div id="player2-name"></div>
-    <div>Turn to play:</div>
     <div id="on-turn"></div>
 
-    <table id="board">
-        <tr>
-            <td id="cell0"></td>
-            <td id="cell1"></td>
-            <td id="cell2"></td>
-        </tr>
-        <tr>
-            <td id="cell3"></td>
-            <td id="cell4"></td>
-            <td id="cell5"></td>
-        </tr>
-        <tr>
-            <td id="cell6"></td>
-            <td id="cell7"></td>
-            <td id="cell8"></td>
-        </tr>
-    </table>
 </body>
 
 </html>
