@@ -36,7 +36,7 @@ function wireButtons(){
 }
 
 function scaleTable(){
-    var boardElement = $("#board");
+    var boardElement = $("table");
     var width = boardElement.parent().width();
     boardElement.height(width);
 }
