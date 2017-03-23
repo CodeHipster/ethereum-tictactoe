@@ -13,7 +13,7 @@ var playerAddress = null;
 //load means when content is loaded. Happens before ready.
 $(window).on("load", initializeContract);
 $(window).on("resize", scaleTable);
-$(window).ready(wireButtons);
+$(window).ready(setupWelcomeView);
 $(window).ready(scaleTable);
 
 function initializeContract(){
@@ -27,12 +27,58 @@ function initializeContract(){
         console.log("Oops something went wrong with loading tictactoe.json.");});
 }
 
-//Wire all the html elements to javascript functions.
-function wireButtons(){
+function setupWelcomeView(){
+    //wire buttons.
     $("#new-game-btn").click(newGame);
-    $("#join-btn").click(join);
+    $("#existing-game-btn").click(existingContract);
+    
+    //hide some elements.
+    $("#game-information").addClass("hidden");
+    $("#player-information").addClass("hidden");
+    
+    //show board as disabled.
+    $("#board").addClass("disabled");
+}
+
+function setupGameView(instance){
+    //hide create buttons
+    $("#create-game-buttons").addClass("hidden");
+
+    //show game state elements
+    $("#game-information").removeClass("hidden");
+    $("#player-information").removeClass("hidden");
+
+    //enable board.
+    $("#board").removeClass("disabled");
     //when clicking any table data on the board.
     $("#board td").click(placeMarker);
+
+    //Set the game address.
+    $("#game-address").text(instance.address);
+    $("#join-btn").click(join);
+
+    //load the state.
+    loadState();
+
+}
+
+function existingContract(){
+    var address = $("#game-address-input").val();
+    console.log("loading existing game at: "+ address);
+    if(validAddress(address)){
+        TictactoeContract.at(address).then(
+            onInstanceCreated
+        ,function(error){
+            alert("failed to instantiate existing game.");
+            console.log(error);
+        });
+    }else{
+        alert("please input valid address.");
+    }
+}
+
+function validAddress(address){
+    return (address && address !== "");
 }
 
 function scaleTable(){
@@ -51,7 +97,7 @@ function placeMarker(args){
     var cell = this;
 
     getState().then(function(state){
-        if(state.phase != "Playing"){
+        if(state.phaseName != "playing"){
             alert("The game is not in play state.");
             return;
         }
@@ -78,26 +124,32 @@ function newGame(){
 
     playerAddress = web3.eth.accounts[0];
     console.log(playerAddress);
-    TictactoeContract.new("Thijs 1", {from: playerAddress, gas:3000000})
-    .then(
-        onInstanceCreated
-        ,function(error){
-            alert("could not deploy a new contract.")
-            console.log(error)
-        }
-    );
+    var playerName = $("#new-game-input").val();
+    if(validPlayerName(playerName)){
+        TictactoeContract.new(playerName, {from: playerAddress, gas:3000000})
+        .then(
+            onInstanceCreated
+            ,function(error){
+                alert("could not deploy a new contract.")
+                console.log(error)
+            }
+        );
+    }else{
+        alert("provide a valid nickname.");
+    }
+}
+
+function validPlayerName(name){
+    return (name && name !== "");
 }
 
 function onInstanceCreated(instance){
     ticTacToeInstance = instance;
-    console.log("new game is ready.");
+    console.log("instance instantiated.");
     // Start watchers for state change events.
     instance.StateChange(onStateChange);
-    // get the state.
-    loadState();
-    //Set the address of this game.
-    console.log(instance);
-    $("#game-address").text(instance.address);
+    // Setup the game view.
+    setupGameView(instance);
 }
 
 function onStateChange(error, result){
@@ -118,7 +170,7 @@ function loadState(){
     ticTacToeInstance.getState().then(function(state){
         var parsedState = parseGameState(state);
         console.log(parsedState);
-        $("#state").html(parsedState.phase);
+        $("#state-message").html(parsedState.phaseMessage);
         $("#player1-name").html(parsedState.player1.name);
         $("#player2-name").html(parsedState.player2.name);
         $("#on-turn").html(parsedState.onTurn);
@@ -131,32 +183,29 @@ function loadState(){
         $("#cell6").html(parsedState.board[6]);
         $("#cell7").html(parsedState.board[7]);
         $("#cell8").html(parsedState.board[8]);
+
+        if(parsedState.phaseName !== "joining"){    
+            $("#join-elements").addClass("hidden");
+        }
     });
 }
 
 function join(){
-    var address = $("#join-input").val();
-    console.log("joining game: "+ address);
-    if(address && address !== ""){
-        TictactoeContract.at(address).then(function(instance){
-            onInstanceCreated(instance);
-            
-            playerAddress = web3.eth.accounts[1];
-            instance.join("Thijs 2", {from: playerAddress})
-        }
-        ,function(error){
-            alert("failed to join game.");
-            console.log(error);
-        });
+    var playerName = $("#join-input").val();
+    playerAddress = web3.eth.accounts[1];
+    if(validPlayerName(playerName)){
+        ticTacToeInstance.join(playerName, {from: playerAddress})
     }else{
-        alert("please input valid address.");
+        alert("provide a valid nickname.")
     }
 
 }
 
 function parseGameState(gamestate){
   var parsed = {};
-  parsed.phase = parsePhase(gamestate[0]);
+  var phaseInt = gamestate[0].toFixed();
+  parsed.phaseMessage = phaseMap[phaseInt].message;
+  parsed.phaseName = phaseMap[phaseInt].name;
   parsed.board = parseBoard(gamestate[1]);
   parsed.onTurn = gamestate[2];
   parsed.player1 = {};
@@ -176,19 +225,11 @@ function parseBoard(board){
   ];
 }
 
-function parsePhase(phase){
-  switch(phase.toFixed()) {
-    case "0":
-      return "Waiting for player 2.";
-    case "1":
-      return "Playing"
-    case "2":
-      return "The game has ended."
-    case "3":
-      return "Ether has been payed to the winner(s)."
-    default:
-      throw "unknown game phase."
-  }
+var phaseMap = {
+    "0":{name:"joining", message:"Waiting for player 2."},
+    "1":{name:"playing", message:"Playing"},
+    "2":{name:"ended", message:"The game has ended."},
+    "3":{name:"payed",message:"Ether has been payed to the winner(s)."}
 }
 
 //end iife

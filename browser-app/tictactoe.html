@@ -17,7 +17,6 @@
 </head>
 
 <body>
-
     <div class="container">
         <div class="row">
             <div class="col-xs-12">
@@ -29,72 +28,60 @@
                 </div>        
             </div>
         </div>
-        <div id="create-game-buttons">
-            <div class="row">
-                <div class="col-xs-2 col-xs-offset-3">
-                    <input id="nickname-input" type="text" name="nickname" value="Your nick name.">
-                    <button id="new-game-btn">new game</button>
-                </div>
-                <div class="col-xs-2 col-xs-offset-2">
-                    <input id="game-address-input" type="text" name="game address" value="0x29873874...">
-                    <button id="existing-game-btn">existing game</button>
-                </div>
+        <div id="create-game-buttons" class="row">
+            <div class="col-xs-4 col-xs-offset-2">
+                <input id="new-game-input" type="text" name="nickname" value="Your nick name.">
+                <button id="new-game-btn">new game</button>
+            </div>
+            <div class="col-xs-4">
+                <input id="game-address-input" type="text" name="game address" value="0x29873874...">
+                <button id="existing-game-btn">existing game</button>
             </div>
         </div>
-        <div id="game-information">
-            <div class="row">
+        <div >
+            <div id="game-information" class="row">
                 <div>Game address:<span id="game-address">game's address</span></div>
                 <div>State:<span id="state-message">some message to inform player</span></div>
             </div>
         </div>
         <div id="player-information">
             <div class="row">
-                <div class="col-xs-2 col-xs-offset-3 player-box">
+                <div class="col-xs-4 col-xs-offset-2 player-box">
                     <div>player 1</div>
                     <div>name:<span id="player1-name">player1's name</span></div>
-                    <div>address:<span id="player1-address">player1's address</span></div>
                 </div>
-                <div class="col-xs-2 col-xs-offset-2 player-box">
+                <div class="col-xs-4 player-box">
                     <div>player 2</div>
                     <div>name:<span id="player2-name">player2's name</span></div>
-                    <div>address:<span id="player2-address">player2's address</span></div>
+                    <div id="join-elements">
+                        <input id="join-input" type="text" name="join input" value="Your nick name.">
+                        <button id="join-btn">join</button>
+                    </div>
                 </div>
             </div>
         </div>
-        <div id="board">
-            <div class="row">
-                <div class="col-xs-6 col-xs-offset-3">
-                    <table>
-                        <tr>
-                            <td id="cell0"></td>
-                            <td id="cell1"></td>
-                            <td id="cell2"></td>
-                        </tr>
-                        <tr>
-                            <td id="cell3"></td>
-                            <td id="cell4"></td>
-                            <td id="cell5"></td>
-                        </tr>
-                        <tr>
-                            <td id="cell6"></td>
-                            <td id="cell7"></td>
-                            <td id="cell8"></td>
-                        </tr>
-                    </table>
-                </div>
-                </div>
+        <div id="board" class="row top-buffer">
+            <div class="col-xs-6 col-xs-offset-3">
+                <table>
+                    <tr>
+                        <td id="cell0"></td>
+                        <td id="cell1"></td>
+                        <td id="cell2"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell3"></td>
+                        <td id="cell4"></td>
+                        <td id="cell5"></td>
+                    </tr>
+                    <tr>
+                        <td id="cell6"></td>
+                        <td id="cell7"></td>
+                        <td id="cell8"></td>
+                    </tr>
+                </table>
+            </div>
             </div>
         </div>
     </div>
-            
-
-    <button id="new-game-btn" type="button">New game</button>
-    Game to join: <input type="text" id="join-input">
-    <button id="join-btn" type="button">Join</button>
-    
-    <div id="state"></div>
-    <div id="on-turn"></div>
-
 </body>
-
 </html>

@@ -9,8 +9,13 @@ table
 
 td
 {
-    border: 5px solid black;
-    overflow: hidden;
+    border: 5px solid;
+}
+
+button, input
+{
+    display: block;
+    width: 100%;
 }
 
 .bg-header
@@ -27,5 +32,11 @@ td
 .player-box
 {
     text-align: left;
-    background-color: #43ABC9
+    background-color: #43ABC9;
 }
+
+.hidden { display:none; }
+
+.disabled td {border-color:#cccccc; }
+
+.top-buffer { margin-top:20px; }
