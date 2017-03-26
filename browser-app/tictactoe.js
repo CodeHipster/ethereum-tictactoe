@@ -100,15 +100,14 @@ function placeMarker(args){
         if(state.phaseName != "playing"){
             alert("The game is not in play state.");
             return;
-        }
+        }         
         var position = $(cell).attr('id').substring(4,5);
-
-        ticTacToeInstance.placeMarker(position,{from: playerAddress})
-        .then(function(){console.log("marker placed");}
-        ,function(error){
-            alert("placing marker failed.");
-            console.log(error);
-        });
+        return ticTacToeInstance.placeMarker(position,{from: web3.eth.accounts[0]})
+    }).then(function(){
+        console.log("marker placed");}
+    ,function(error){
+        alert("placing marker failed.");
+        console.log(error);
     });
 }
 
@@ -122,11 +121,9 @@ function newGame(){
         return;
     }
 
-    playerAddress = web3.eth.accounts[0];
-    console.log(playerAddress);
     var playerName = $("#new-game-input").val();
     if(validPlayerName(playerName)){
-        TictactoeContract.new(playerName, {from: playerAddress, gas:3000000})
+        TictactoeContract.new(playerName, {from: web3.eth.accounts[0], gas:3000000})
         .then(
             onInstanceCreated
             ,function(error){
@@ -171,8 +168,8 @@ function loadState(){
         var parsedState = parseGameState(state);
         console.log(parsedState);
         $("#state-message").html(parsedState.phaseMessage);
-        $("#player1-name").html(parsedState.player1.name);
-        $("#player2-name").html(parsedState.player2.name);
+        $("#player1-name").html(parsedState.player1);
+        $("#player2-name").html(parsedState.player2);
         $("#on-turn").html(parsedState.onTurn);
         $("#cell0").html(parsedState.board[0]);
         $("#cell1").html(parsedState.board[1]);
@@ -192,9 +189,8 @@ function loadState(){
 
 function join(){
     var playerName = $("#join-input").val();
-    playerAddress = web3.eth.accounts[1];
     if(validPlayerName(playerName)){
-        ticTacToeInstance.join(playerName, {from: playerAddress})
+        ticTacToeInstance.join(playerName, {from: web3.eth.accounts[0], gas:3000000})
     }else{
         alert("provide a valid nickname.")
     }
@@ -208,12 +204,9 @@ function parseGameState(gamestate){
   parsed.phaseName = phaseMap[phaseInt].name;
   parsed.board = parseBoard(gamestate[1]);
   parsed.onTurn = gamestate[2];
-  parsed.player1 = {};
-  parsed.player1.address = gamestate[3];
-  parsed.player1.name = gamestate[4];
-  parsed.player2 = {};
-  parsed.player2.address = gamestate[5];
-  parsed.player2.name = gamestate[6];
+  parsed.onTurn = gamestate[2];
+  parsed.player1 = gamestate[3];
+  parsed.player2 = gamestate[4];
   return parsed;
 } 
 

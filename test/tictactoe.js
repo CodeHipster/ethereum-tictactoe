@@ -5,12 +5,8 @@ function parseGameState(gamestate){
   parsed.phase = parsePhase(gamestate[0]);
   parsed.board = parseBoard(gamestate[1]);
   parsed.onTurn = gamestate[2];
-  parsed.player1 = {};
-  parsed.player1.address = gamestate[3];
-  parsed.player1.name = gamestate[4];
-  parsed.player2 = {};
-  parsed.player2.address = gamestate[5];
-  parsed.player2.name = gamestate[6];
+  parsed.player1 = gamestate[3];
+  parsed.player2 = gamestate[4];
   return parsed;
 } 
 
@@ -38,15 +34,17 @@ function parsePhase(phase){
 }
 
 contract('TicTacToe', function(accounts) {
-
   var inst;
   it("should play a game with another player", function() {
     console.log("Player1 starts a game.");
-    return TicTacToe.deployed("Player1")
+    return TicTacToe.new("Thijs1",{from:web3.eth.accounts[0]})
     .then(function(instance) {
       inst = instance;
+      return inst.getState();
+    }).then(function(gamestate) {
+      console.log(parseGameState(gamestate));
       console.log("Player2 joins the game.")
-      return inst.join("Player2",{from:accounts[1]});
+      return inst.join("Thijs2",{from:accounts[1]});
     }).then(function() {
       return inst.getState();
     }).then(function(gamestate) {
@@ -81,9 +79,53 @@ contract('TicTacToe', function(accounts) {
       return inst.getState();
     }).then(function(gamestate) {
       console.log(parseGameState(gamestate));
-      return inst.hasWon(accounts[0]);
-    }).then(function(hasWon){
-      console.log("Player1 has won: ", hasWon);
+    });
+  });
+
+  it("should play a game with itself", function() {
+    console.log("Player1 starts a game.");
+    return TicTacToe.deployed("Thijs1")
+    .then(function(instance) {
+      inst = instance;
+      return inst.getState();
+    }).then(function(gamestate) {
+      console.log(parseGameState(gamestate));
+      console.log("Player2 joins the game.")
+      return inst.join("Thijs2",{from:accounts[1]});
+    }).then(function() {
+      return inst.getState();
+    }).then(function(gamestate) {
+      console.log(parseGameState(gamestate));
+      console.log("Player1 places marker on 0");
+      return inst.placeMarker(0,{from:accounts[0]});
+    }).then(function() {
+      return inst.getState();
+    }).then(function(gamestate) {
+      console.log(parseGameState(gamestate));
+      console.log("Player2 places marker on 3");
+      return inst.placeMarker(3,{from:accounts[1]});
+    }).then(function() {
+      return inst.getState();
+    }).then(function(gamestate) {
+      console.log(parseGameState(gamestate));
+      console.log("Player1 places marker on 1");
+      return inst.placeMarker(1,{from:accounts[0]});
+    }).then(function() {
+      return inst.getState();
+    }).then(function(gamestate) {
+      console.log(parseGameState(gamestate));
+      console.log("Player2 places marker on 4");
+      return inst.placeMarker(4,{from:accounts[1]});
+    }).then(function() {
+      return inst.getState();
+    }).then(function(gamestate) {
+      console.log(parseGameState(gamestate));
+      console.log("Player1 places marker on 2");
+      return inst.placeMarker(2,{from:accounts[0]});
+    }).then(function() {
+      return inst.getState();
+    }).then(function(gamestate) {
+      console.log(parseGameState(gamestate));
     });
   });
 });
