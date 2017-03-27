@@ -10,6 +10,9 @@ table
 td
 {
     border: 5px solid;
+    text-align:center; 
+    vertical-align:middle;
+    font-size: 90%;
 }
 
 button, input
@@ -29,10 +32,10 @@ button, input
     color: #3C3C3D;
 }
 
-.player-box
+.info-box
 {
     text-align: left;
-    background-color: #43ABC9;
+    background-color: #e2e8e9;
 }
 
 .hidden { display:none; }
@@ -40,3 +43,10 @@ button, input
 .disabled td {border-color:#cccccc; }
 
 .top-buffer { margin-top:20px; }
+
+.buffer { margin: 10px;}
+
+.highlight {
+  outline: 5px solid darkgoldenrod;
+  background: transparent;
+}

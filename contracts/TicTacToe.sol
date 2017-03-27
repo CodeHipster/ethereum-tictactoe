@@ -119,16 +119,9 @@ contract TicTacToe {
         return (true,ValidExplanations.Valid);
     }
     
-    function getState() public constant returns (Phase phase, Player[9] board, string onTurn, string player1, string player2) {
+    function getState() public constant returns (Phase phase, Player[9] board, Player onTurn, string player1, string player2) {
         //return the state of the game.
-        if(gamestate.onTurn == Player.Player1){
-            onTurn = gamestate.player1;
-
-        }
-        if(gamestate.onTurn == Player.Player2){
-            onTurn = gamestate.player2;
-
-        }        
+        onTurn = gamestate.onTurn;
         phase = gamestate.phase;
         board = gamestate.board;
         player1 = gamestate.player1;

@@ -83,8 +83,12 @@ function validAddress(address){
 
 function scaleTable(){
     var boardElement = $("table");
-    var width = boardElement.parent().width();
-    boardElement.height(width);
+    var size = boardElement.parent().width();
+    boardElement.height(size);
+    var cellsize = size/3;
+    $("td").height(cellsize);
+    $("td").width(cellsize);
+    $("td span").css({ 'font-size': cellsize });
 }
 
 function placeMarker(args){    
@@ -170,21 +174,37 @@ function loadState(){
         $("#state-message").html(parsedState.phaseMessage);
         $("#player1-name").html(parsedState.player1);
         $("#player2-name").html(parsedState.player2);
+        if(parsedState.onTurn == 1){
+            $("#player-1-box").addClass("highlight");
+            $("#player-2-box").removeClass("highlight");
+
+        }else if(parsedState.onTurn == 2){
+            $("#player-2-box").addClass("highlight");
+            $("#player-1-box").removeClass("highlight");
+        }
         $("#on-turn").html(parsedState.onTurn);
-        $("#cell0").html(parsedState.board[0]);
-        $("#cell1").html(parsedState.board[1]);
-        $("#cell2").html(parsedState.board[2]);
-        $("#cell3").html(parsedState.board[3]);
-        $("#cell4").html(parsedState.board[4]);
-        $("#cell5").html(parsedState.board[5]);
-        $("#cell6").html(parsedState.board[6]);
-        $("#cell7").html(parsedState.board[7]);
-        $("#cell8").html(parsedState.board[8]);
+        $("#cell0 span").addClass(getIconClass(parsedState.board[0]));
+        $("#cell1 span").addClass(getIconClass(parsedState.board[1]));
+        $("#cell2 span").addClass(getIconClass(parsedState.board[2]));
+        $("#cell3 span").addClass(getIconClass(parsedState.board[3]));
+        $("#cell4 span").addClass(getIconClass(parsedState.board[4]));
+        $("#cell5 span").addClass(getIconClass(parsedState.board[5]));
+        $("#cell6 span").addClass(getIconClass(parsedState.board[6]));
+        $("#cell7 span").addClass(getIconClass(parsedState.board[7]));
+        $("#cell8 span").addClass(getIconClass(parsedState.board[8]));
 
         if(parsedState.phaseName !== "joining"){    
             $("#join-elements").addClass("hidden");
         }
     });
+}
+
+function getIconClass(player){
+    if(player == 1){
+        return "fa fa-circle-o";
+    }else if( player == 2){
+        return "fa fa-times";
+    }
 }
 
 function join(){
@@ -203,7 +223,6 @@ function parseGameState(gamestate){
   parsed.phaseMessage = phaseMap[phaseInt].message;
   parsed.phaseName = phaseMap[phaseInt].name;
   parsed.board = parseBoard(gamestate[1]);
-  parsed.onTurn = gamestate[2];
   parsed.onTurn = gamestate[2];
   parsed.player1 = gamestate[3];
   parsed.player2 = gamestate[4];
