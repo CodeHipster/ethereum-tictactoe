@@ -31,6 +31,7 @@ function setupWelcomeView(){
     //wire buttons.
     $("#new-game-btn").click(newGame);
     $("#existing-game-btn").click(existingContract);
+    $("#refresh-btn").click(loadState);
     
     //hide some elements.
     $("#game-information").addClass("hidden");
@@ -127,7 +128,7 @@ function newGame(){
 
     var playerName = $("#new-game-input").val();
     if(validPlayerName(playerName)){
-        TictactoeContract.new(playerName, {from: web3.eth.accounts[0], gas:3000000})
+        TictactoeContract.new(playerName, {from: web3.eth.accounts[0], gas:1000000})
         .then(
             onInstanceCreated
             ,function(error){
@@ -210,7 +211,7 @@ function getIconClass(player){
 function join(){
     var playerName = $("#join-input").val();
     if(validPlayerName(playerName)){
-        ticTacToeInstance.join(playerName, {from: web3.eth.accounts[0], gas:3000000})
+        ticTacToeInstance.join(playerName, {from: web3.eth.accounts[0], gas:1000000})
     }else{
         alert("provide a valid nickname.")
     }
